@@ -13,8 +13,7 @@ protoc_version="3.14.0"
 protoc_save="/usr/local/bin"
 # protoc url
 protoc_download_url="https://github.com/protocolbuffers/protobuf/releases/download/v${protoc_version}/protoc-${protoc_version}-${platform}.zip"
-# network
-network="bongolive"
+
 # api
 api=bitMapServ
 
@@ -34,9 +33,14 @@ fi
 
 # 安装tools
 function install() {
-    go get -u github.com/golang/protobuf/protoc-gen-go && \
-    go get -u github.com/tal-tech/go-zero/tools/goctl && \
-    go get -u github.com/zeromicro/goctl-swagger && \
+    # old go version
+    #go get -u github.com/golang/protobuf/protoc-gen-go && \
+    #go get -u github.com/tal-tech/go-zero/tools/goctl && \
+    #go get -u github.com/zeromicro/goctl-swagger && \
+    # go 1.17>=
+    go install github.com/golang/protobuf/protoc-gen-go && \
+    go install github.com/tal-tech/go-zero/tools/goctl && \
+    go install github.com/zeromicro/goctl-swagger && \
     curl --request GET -sL \
          --url "'${protoc_download_url}'"\
          --output "'${protoc_save}/protoc-${protoc_version}-${platform}.zip'" && \
@@ -48,9 +52,6 @@ function install() {
 function init() {
     if [ ! -f "./.docker/etc" ];then
       mkdir ./.docker/etc/ -p  && cp ./api/etc/${api}.yaml .docker/etc/${api}.yaml
-    fi
-    if [ "`docker network inspect "${network}" | grep "No such network:" |grep -v grep`x" == "x" ];then
-      docker network create "${network}"
     fi
 }
 
@@ -97,10 +98,6 @@ function push() {
     git push origin "${branch}" -u
 }
 
-# 创建docker 网络
-function network() {
-     docker network create ${network}
-}
 
 function main(){
   case "$action" in
