@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+// 一定要写
+option go_package = "bitMapServ/rpc";
+
+package rpc;
+
+message RpcSingleRequest {
+    string  date = 1; // 查询日期
+    // 留存类型(0:日期为截止日,1:日期为开始日)
+    enum   DataType {
+        END = 0;
+        START = 1;
+    }
+    DataType type = 2;
+    int32   day = 3; // 第几日留存
+    string   channel = 4; // 渠道名
+    string   role = 5; // 身份类型 (0:普通用户,1:主播)
+    string   data_source = 6;// 数据源
+}
+
+message RpcMulitRequest {
+    string  date = 1; // 查询日期
+     // 留存类型(0:日期为截止日,1:日期为开始日)
+    enum   DataType {
+        END = 0;
+        START = 1;
+    }
+    DataType type = 2;
+    repeated  int32   days = 3; // 多天 留存天集合
+    string   channel = 4; // 渠道名
+    string   role = 5; // 身份类型 (0:普通用户,1:主播)
+    string   data_source = 6;// 数据源
+}
+
+message RpcMulitChannelsRequest {
+    string  date = 1; // 查询日期
+     // 留存类型(0:日期为截止日,1:日期为开始日)
+    enum   DataType {
+        END = 0;
+        START = 1;
+    }
+    DataType type = 2;
+    repeated  int32   days = 3; // 多天 留存天集合
+    repeated string   channels = 4; // 多渠道
+    string   role = 5; // 身份类型 (0:普通用户,1:主播)
+    string   data_source = 6;// 数据源
+}
+
+message RpcErrorResponse {
+    int32     code = 1;   // 业务码
+    string     msg = 2;   // 业务提示
+    int32    error_no = 3;// 错误码
+}
+
+message KeeperStruct {
+    string keep = 1;   // string `json:"keep" desc:"留存"`
+    string name = 2;    // string `json:"name" desc:"留存描述"`
+    int64 register = 3;  // int    `json:"total" desc:"开始时间注册量"`
+    int64 left = 4;  // int    `json:"left" desc:"当天留存量"`
+}
+
+message RpcChannelResponse {
+    string channel = 1; //string          `json:"channel" desc:"渠道名"`
+    repeated KeeperStruct items = 2;   //[]*KeeperStruct `json:"items" desc:"结果集合"`
+}
+
+message RpcSingleResponse {
+    int32     code = 1;   // 业务码
+    string     msg = 2;   // 业务提示
+     int32    error_no = 3;// 错误码
+    KeeperStruct data = 4;         //结果数据"
+}
+
+message RpcMulitResponse {
+    int32     code = 1;   // 业务码
+    string     msg = 2;   // 业务提示
+     int32    error_no = 3;// 错误码
+    repeated KeeperStruct data = 4; //结果数据
+}
+
+message RpcMulitChannelsResponse {
+    int32     code = 1;   // 业务码
+    string     msg = 2;   // 业务提示
+     int32    error_no = 3;// 错误码
+    repeated RpcChannelResponse data = 4; //结果集合
+}
+
+message PingRequest {
+    int64 timestamp = 1; // 时间戳
+    int32 ack = 2;// 回答id
+}
+
+message PingResponse {
+    int64 timestamp = 1; // 时间戳
+    int32 ack = 2;// 回答id
+}
+
+// 留存服务服务
+service BitMapServ {
+    rpc Ping(PingRequest) returns(PingResponse) {};
+    rpc UserKeeper(RpcSingleRequest) returns(RpcSingleResponse) {};
+    rpc UserKeepers(RpcMulitRequest) returns(RpcMulitResponse) {};
+    rpc ChannelsUserKeepers(RpcMulitChannelsRequest) returns(RpcMulitChannelsResponse) {};
+}

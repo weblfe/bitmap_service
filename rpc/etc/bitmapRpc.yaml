@@ -1,0 +1,20 @@
+Name: bitmaprpc.rpc
+ListenOn: 127.0.0.1:8081
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: bitmaprpc.rpc
+
+CpuThreshold: 1000
+SafeTime: 7200s
+DocsPath: .docker/docs/swagger.json
+Log:
+  Mode: file
+  Path: logs
+  Compress: true
+  KeepDays: 3
+DataSource: root:root@tcp(localhost:23306)/app_data
+Table: bongo_user_day_login
+Cache:
+  - Host: localhost:6379
+    Pass:

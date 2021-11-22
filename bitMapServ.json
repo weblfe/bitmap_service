@@ -1,0 +1,271 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "bitMapServ",
+    "version": "v1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/bitmap/userkeeper": {
+      "get": {
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SingleResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "day",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data_source",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "bitMapServ-api"
+        ]
+      },
+      "post": {
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SingleResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SingleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "bitMapServ-api"
+        ]
+      }
+    },
+    "/bitmap/userkeepers": {
+      "get": {
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/MulitResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "data_source",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "bitMapServ-api"
+        ]
+      },
+      "post": {
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/MulitResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MulitRequest"
+            }
+          }
+        ],
+        "tags": [
+          "bitMapServ-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "errorNo": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "BaseResponse",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "KeeperStruct": {
+      "type": "object",
+      "properties": {
+        "keep": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "left": {
+          "type": "integer"
+        }
+      },
+      "title": "KeeperStruct",
+      "required": [
+        "keep",
+        "name",
+        "left",
+        "total"
+      ]
+    },
+    "MulitRequest": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "data_source": {
+          "type": "string"
+        }
+      },
+      "title": "MulitRequest",
+      "required": [
+        "days",
+        "date"
+      ]
+    },
+    "MulitResponse": {
+      "type": "object",
+      "properties": {
+        "": {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KeeperStruct"
+          }
+        }
+      },
+      "title": "MulitResponse",
+      "required": [
+        "data"
+      ]
+    },
+    "SingleRequest": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data_source": {
+          "type": "string"
+        }
+      },
+      "title": "SingleRequest",
+      "required": [
+        "day",
+        "date"
+      ]
+    },
+    "SingleResponse": {
+      "type": "object",
+      "properties": {
+        "": {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        "data": {
+          "$ref": "#/definitions/KeeperStruct"
+        }
+      },
+      "title": "SingleResponse",
+      "required": [
+        "data"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

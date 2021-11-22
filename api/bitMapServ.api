@@ -1,0 +1,95 @@
+syntax = "v1"
+
+info(
+    title: "bitMapServ"
+    desc: "bitmap service"
+    author: "weblinuxgame"
+    email: "15975798646@163.com"
+    version: "v1.0.0"
+)
+
+type SingleRequest {
+    Date string `form:"date,optional"`              // 查询日期
+    Type int `form:"type,default=0"`                //  留存类型(0:日期为截止日,1:日期为开始日)
+    Day int `form:"day,range=[1:366]"`              // 第几日留存
+    Channel string `form:"channel,optional"`        // 渠道名
+    Role string `form:"role,optional"`              // 身份类型
+    DataSource string `form:"data_source,optional"` // 数据源
+}
+
+type MulitRequest {
+    Date string `form:"date,optional"`             // 查询日期
+    Type int `form:"type,default=0"`               // 留存类型(0:日期为截止日,1:日期为开始日)
+    Days []int `form:"days,"`                      // 留存天集合
+    Channel string `form:"channel,optional"`       // 渠道名
+    Role string `form:"role,optional"`             // 身份类型
+    DataSource string `form:"data_source,optional"`// 数据源
+}
+
+type MulitChannelsRequest {
+    Date string `form:"date,optional"`             // 查询日期
+    Type int `form:"type,default=0"`               // 留存类型(0:日期为截止日,1:日期为开始日)
+    Days []int `form:"days,"`                      // 留存天集合
+    Channels []string `form:"channels"`            // 渠道名
+    Role string `form:"role,optional"`             // 身份类型
+    DataSource string `form:"data_source,optional"`// 数据源
+}
+
+type BaseResponse {
+    Code int `json:"code"`               // 业务码
+    Msg string `json:"msg"`              // 业务提示
+    ErrorNo int `json:"errorNo,optional"`// 错误码
+}
+
+type KeeperStruct {
+    Keep string `json:"keep"`   // 留存
+    Name string `json:"name"`   // 留存描述
+    Register int `json:"total"` // 开始时间注册量
+    Left int `json:"left"`      // 当天留存量
+}
+
+type ChannelResponse {
+    Channel string `json:"channel"`      // 渠道名
+    Items []*KeeperStruct `json:"items"` // 结果集合
+}
+
+type SingleResponse {
+    BaseResponse
+    Data *KeeperStruct `json:"data"`// 结果数据
+}
+
+type MulitResponse {
+    BaseResponse
+    Data []*KeeperStruct `json:"data"`// 结果集合
+}
+
+type MulitChannelsResponse {
+    BaseResponse
+    Data []*ChannelResponse `json:"data"`//  结果集合
+}
+
+service bitMapServ-api {
+    @doc(
+        summary : "获取单天留存率"
+    )
+    @handler BitMapServSingleGetHandler
+    get /bitmap/userkeeper (SingleRequest) returns (SingleResponse);
+    @handler BitMapServSinglePostHandler
+    post /bitmap/userkeeper (SingleRequest) returns (SingleResponse);
+
+    @doc(
+        summary : "获取多天留存率"
+    )
+    @handler BitMapServMultiGetHandler
+    get /bitmap/userkeepers (MulitRequest) returns (MulitResponse);
+    @handler BitMapServMultiPostHandler
+    post /bitmap/userkeepers (MulitRequest) returns (MulitResponse);
+
+    @doc(
+        summary : "获取渠道多天留存率"
+    )
+    @handler BitMapServChannelsMultiGetHandler
+    get /bitmap/channels/userkeepers (MulitChannelsRequest) returns (MulitChannelsResponse);
+    @handler BitMapServChannelsMultiPostHandler
+    post /bitmap/channels/userkeepers (MulitChannelsRequest) returns (MulitChannelsResponse);
+}
