@@ -17,9 +17,3 @@ services:
     ports:
     -  "28001:8080"
     restart: always
-    networks:
-      - bongolive
-
-networks:
-  bongolive:
-    external: true
