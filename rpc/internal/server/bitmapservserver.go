@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/weblfe/bitmap_service/rpc/bitMapServ/rpc"
-	"github.com/weblfe/bitmap_service/rpc/internal/logic"
-	"github.com/weblfe/bitmap_service/rpc/internal/svc"
+	"rpc/internal/logic"
+	"rpc/internal/svc"
+	"rpc/pb"
 )
 
 type BitMapServServer struct {
@@ -21,22 +21,22 @@ func NewBitMapServServer(svcCtx *svc.ServiceContext) *BitMapServServer {
 	}
 }
 
-func (s *BitMapServServer) Ping(ctx context.Context, in *rpc.PingRequest) (*rpc.PingResponse, error) {
+func (s *BitMapServServer) Ping(ctx context.Context, in *pb.PingRequest) (*pb.PingResponse, error) {
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
 }
 
-func (s *BitMapServServer) UserKeeper(ctx context.Context, in *rpc.RpcSingleRequest) (*rpc.RpcSingleResponse, error) {
+func (s *BitMapServServer) UserKeeper(ctx context.Context, in *pb.RpcSingleRequest) (*pb.RpcSingleResponse, error) {
 	l := logic.NewUserKeeperLogic(ctx, s.svcCtx)
 	return l.UserKeeper(in)
 }
 
-func (s *BitMapServServer) UserKeepers(ctx context.Context, in *rpc.RpcMulitRequest) (*rpc.RpcMulitResponse, error) {
+func (s *BitMapServServer) UserKeepers(ctx context.Context, in *pb.RpcMulitRequest) (*pb.RpcMulitResponse, error) {
 	l := logic.NewUserKeepersLogic(ctx, s.svcCtx)
 	return l.UserKeepers(in)
 }
 
-func (s *BitMapServServer) ChannelsUserKeepers(ctx context.Context, in *rpc.RpcMulitChannelsRequest) (*rpc.RpcMulitChannelsResponse, error) {
+func (s *BitMapServServer) ChannelsUserKeepers(ctx context.Context, in *pb.RpcMulitChannelsRequest) (*pb.RpcMulitChannelsResponse, error) {
 	l := logic.NewChannelsUserKeepersLogic(ctx, s.svcCtx)
 	return l.ChannelsUserKeepers(in)
 }

@@ -17,8 +17,8 @@ package clientv3
 import (
 	"context"
 
-	"go.etcd.io/etcd/etcdserver/api/v3rpc/rpctypes"
-	pb "go.etcd.io/etcd/etcdserver/etcdserverpb"
+	"github.com/coreos/etcd/etcdserver/api/v3rpc/rpctypes"
+	pb "github.com/coreos/etcd/etcdserver/etcdserverpb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -179,10 +179,6 @@ func (rcc *retryClusterClient) MemberUpdate(ctx context.Context, in *pb.MemberUp
 	return rcc.cc.MemberUpdate(ctx, in, opts...)
 }
 
-func (rcc *retryClusterClient) MemberPromote(ctx context.Context, in *pb.MemberPromoteRequest, opts ...grpc.CallOption) (resp *pb.MemberPromoteResponse, err error) {
-	return rcc.cc.MemberPromote(ctx, in, opts...)
-}
-
 type retryMaintenanceClient struct {
 	mc pb.MaintenanceClient
 }
@@ -222,10 +218,6 @@ func (rmc *retryMaintenanceClient) Defragment(ctx context.Context, in *pb.Defrag
 	return rmc.mc.Defragment(ctx, in, opts...)
 }
 
-func (rmc *retryMaintenanceClient) Downgrade(ctx context.Context, in *pb.DowngradeRequest, opts ...grpc.CallOption) (resp *pb.DowngradeResponse, err error) {
-	return rmc.mc.Downgrade(ctx, in, opts...)
-}
-
 type retryAuthClient struct {
 	ac pb.AuthClient
 }
@@ -259,10 +251,6 @@ func (rac *retryAuthClient) AuthEnable(ctx context.Context, in *pb.AuthEnableReq
 
 func (rac *retryAuthClient) AuthDisable(ctx context.Context, in *pb.AuthDisableRequest, opts ...grpc.CallOption) (resp *pb.AuthDisableResponse, err error) {
 	return rac.ac.AuthDisable(ctx, in, opts...)
-}
-
-func (rac *retryAuthClient) AuthStatus(ctx context.Context, in *pb.AuthStatusRequest, opts ...grpc.CallOption) (resp *pb.AuthStatusResponse, err error) {
-	return rac.ac.AuthStatus(ctx, in, opts...)
 }
 
 func (rac *retryAuthClient) UserAdd(ctx context.Context, in *pb.AuthUserAddRequest, opts ...grpc.CallOption) (resp *pb.AuthUserAddResponse, err error) {

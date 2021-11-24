@@ -31,6 +31,10 @@ else
   export DOCKERFILE="${3}"
 fi
 
+function rpc() {
+    goctl rpc proto --src rpc/bitMapRpc.proto --dir rpc/
+}
+
 # 安装tools
 function install() {
     # old go version

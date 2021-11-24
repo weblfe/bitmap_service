@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
-	"time"
 
-	"github.com/weblfe/bitmap_service/rpc/bitMapServ/rpc"
-	"github.com/weblfe/bitmap_service/rpc/internal/svc"
+	"rpc/internal/svc"
+	"rpc/pb"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -24,9 +23,8 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 	}
 }
 
-func (l *PingLogic) Ping(request *rpc.PingRequest) (*rpc.PingResponse, error) {
-	return &rpc.PingResponse{
-		Timestamp: time.Now().Unix(),
-		Ack:       request.Ack + 1,
-	}, nil
+func (l *PingLogic) Ping(in *pb.PingRequest) (*pb.PingResponse, error) {
+	// todo: add your logic here and delete this line
+
+	return &pb.PingResponse{}, nil
 }
